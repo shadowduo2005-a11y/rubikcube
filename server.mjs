@@ -63,6 +63,9 @@ function sendJson(response, status, payload) {
   response.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
   });
   response.end(JSON.stringify(payload));
 }
@@ -166,6 +169,15 @@ function readRequestBody(request) {
 compileNativeSolvers();
 
 const server = createServer(async (request, response) => {
+  if (request.method === "OPTIONS") {
+    response.writeHead(204, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+    response.end();
+    return;
+  }
   const pathname = new URL(request.url || "/", "http://localhost").pathname;
   if (request.method === "GET" && serveStaticFile(pathname, response)) return;
 
@@ -195,7 +207,7 @@ const server = createServer(async (request, response) => {
   }
 });
 
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`CubeLab: http://localhost:${port}`);
   console.log("Press Ctrl+C to stop.");
 });
