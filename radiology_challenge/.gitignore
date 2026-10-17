@@ -1,0 +1,9 @@
+# Private competition data and generated submissions must not be committed.
+data/*.csv
+outputs/*.csv
+artifacts/*.jsonl
+artifacts/*.sqlite3
+.env
+__pycache__/
+.ipynb_checkpoints/
+

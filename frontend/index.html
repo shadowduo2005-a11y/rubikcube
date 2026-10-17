@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A verified 3×3 Rubik's Cube solver with Thistlethwaite and Korf algorithms in a precise 2D interface."
+    />
+    <meta name="theme-color" content="#111827" />
+    <title>CubeLab — 3×3 Solver</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="CubeLab home">
+          <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>CubeLab</span>
+        </a>
+        <nav aria-label="Main navigation">
+          <a href="#solver">Solver</a>
+          <a href="#method">Method</a>
+          <a href="#verification">Verification</a>
+        </nav>
+        <span class="header-badge">3×3 / HTM</span>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <div class="eyebrow"><span></span> Native C++ search · two verified algorithms</div>
+            <h1 id="hero-title">Scramble in.<br /><em>Solution out.</em></h1>
+            <p>
+              A precise 3×3 engine that validates notation, runs your selected C++ algorithm,
+              and proves the answer by replaying every turn.
+            </p>
+            <div class="hero-proof">
+              <div><strong>2D</strong><span>planar playback</span></div>
+              <div><strong>18</strong><span>legal face turns</span></div>
+              <div><strong>✓</strong><span>verified output</span></div>
+            </div>
+          </div>
+          <div class="hero-aside" aria-hidden="true">
+            <span>State space</span>
+            <strong>43,252,003,274,489,856,000</strong>
+            <small>legal configurations, one solved target</small>
+          </div>
+        </section>
+
+        <section class="solver-section" id="solver" aria-labelledby="solver-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-index">01 / WORKBENCH</span>
+              <h2 id="solver-title">Solve a cube state</h2>
+            </div>
+            <div class="engine-status status-idle" id="engine-status">
+              <span class="status-dot"></span><span id="engine-label">Engine ready</span>
+            </div>
+          </div>
+
+          <div class="workbench-grid">
+            <div class="control-panel">
+              <div class="algorithm-section">
+                <div class="manual-heading">
+                  <span>Solving algorithm</span><small>native C++</small>
+                </div>
+                <div class="algorithm-picker" role="radiogroup" aria-label="Solving algorithm">
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked="true"
+                    class="algorithm-option is-selected"
+                    data-algorithm="thistlethwaite"
+                  >
+                    <span>Thistlethwaite</span><small>Four-phase</small>
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked="false"
+                    class="algorithm-option"
+                    data-algorithm="korf"
+                  >
+                    <span>Korf IDA*</span><small>Optimal search</small>
+                  </button>
+                </div>
+                <p class="algorithm-note" id="algorithm-note">
+                  Exact pattern-database IDDFS through four restricted move groups.
+                </p>
+              </div>
+
+              <div class="field-heading">
+                <label for="scramble">Scramble notation</label>
+                <button type="button" class="text-button" id="clear-button">Clear</button>
+              </div>
+              <div class="scramble-field">
+                <textarea
+                  id="scramble"
+                  rows="3"
+                  spellcheck="false"
+                  placeholder="Example: R U R' U' F2"
+                  aria-describedby="notation-help"
+                >R U R' U' F2 L</textarea>
+                <span class="field-corner">HTM</span>
+              </div>
+              <p id="notation-help" class="field-help">
+                Faces: U R F D L B · Add <b>′</b> for counter-clockwise or <b>2</b> for a half turn.
+              </p>
+
+              <div class="primary-actions">
+                <button type="button" class="primary-button" id="solve-button">
+                  <span id="solve-label">Solve with Thistlethwaite</span><b>→</b>
+                </button>
+                <button type="button" class="secondary-button" id="random-button">New scramble</button>
+              </div>
+
+              <div class="message-line" role="status" aria-live="polite">
+                <span class="message-icon message-idle" id="message-icon">i</span>
+                <span id="message-text">Ready for a legal 3×3 scramble.</span>
+              </div>
+
+              <div class="manual-section">
+                <div class="manual-heading"><span>Manual turns</span><small>tap to preview</small></div>
+                <div class="move-pad" id="move-pad">
+                  <button type="button" data-move="U">U</button>
+                  <button type="button" data-move="U'">U′</button>
+                  <button type="button" data-move="U2">U2</button>
+                  <button type="button" data-move="R">R</button>
+                  <button type="button" data-move="R'">R′</button>
+                  <button type="button" data-move="R2">R2</button>
+                  <button type="button" data-move="F">F</button>
+                  <button type="button" data-move="F'">F′</button>
+                  <button type="button" data-move="F2">F2</button>
+                  <button type="button" data-move="D">D</button>
+                  <button type="button" data-move="D'">D′</button>
+                  <button type="button" data-move="D2">D2</button>
+                  <button type="button" data-move="L">L</button>
+                  <button type="button" data-move="L'">L′</button>
+                  <button type="button" data-move="L2">L2</button>
+                  <button type="button" data-move="B">B</button>
+                  <button type="button" data-move="B'">B′</button>
+                  <button type="button" data-move="B2">B2</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="cube-player-shell">
+              <div class="player-toolbar">
+                <span class="panel-kicker">2D cube state</span>
+                <span class="render-status is-ready" id="render-status">
+                  <span class="status-dot"></span><span id="render-label">Renderer ready</span>
+                </span>
+              </div>
+              <div class="cube-stage">
+                <div class="cube-net" id="cube-net" aria-label="2D Rubik's Cube net">
+                  <div class="cube-face face-u" data-face="U" aria-label="Upper face"></div>
+                  <div class="cube-face face-l" data-face="L" aria-label="Left face"></div>
+                  <div class="cube-face face-f" data-face="F" aria-label="Front face"></div>
+                  <div class="cube-face face-r" data-face="R" aria-label="Right face"></div>
+                  <div class="cube-face face-b" data-face="B" aria-label="Back face"></div>
+                  <div class="cube-face face-d" data-face="D" aria-label="Down face"></div>
+                </div>
+              </div>
+              <div class="player-actions" aria-label="Solution playback controls">
+                <button type="button" id="reset-player" disabled>↺ Reset</button>
+                <button type="button" class="play-button" id="play-solution" disabled>▶ Play solution</button>
+                <button type="button" id="end-player" disabled>End ↗</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="solution-panel" id="solution-panel">
+            <div class="solution-summary">
+              <span class="section-index">SOLUTION</span>
+              <div class="metric-row">
+                <div><strong id="metric-moves">—</strong><span>moves</span></div>
+                <div><strong id="metric-time">—</strong><span>search time</span></div>
+                <div><strong id="metric-replay">—</strong><span>replay check</span></div>
+                <div><strong id="metric-algorithm">—</strong><span>algorithm</span></div>
+              </div>
+            </div>
+            <div class="solution-output" id="solution-output">
+              <p>Run the solver to generate a move-by-move verified sequence.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="method-section" id="method" aria-labelledby="method-title">
+          <div class="method-intro">
+            <span class="section-index">02 / METHOD</span>
+            <h2 id="method-title">Two algorithms, one verified finish.</h2>
+            <p>
+              Choose exact-PDB four-phase reduction or globally optimal IDA* search.
+              Both results are replayed independently before the UI accepts them.
+            </p>
+          </div>
+          <div class="phase-track">
+            <article>
+              <span class="phase-number">01</span><div class="phase-line"><i></i></div>
+              <h3>Parse & validate</h3><p>Accept only legal face-turn notation and construct a reachable state.</p>
+              <small>U · R · F · D · L · B</small>
+            </article>
+            <article>
+              <span class="phase-number">02</span><div class="phase-line"><i></i></div>
+              <h3>Run native search</h3><p>Use Thistlethwaite's four exact transition databases or Korf IDA* with four admissible pattern databases.</p>
+              <small>FOUR-PHASE / IDA* / PDB</small>
+            </article>
+            <article>
+              <span class="phase-number">03</span><div class="phase-line"><i></i></div>
+              <h3>Finish & prove</h3><p>Replay the answer against a separate cube model.</p>
+              <small>PERMUTE / REPLAY / PASS</small>
+            </article>
+          </div>
+        </section>
+
+        <section class="verification-section" id="verification" aria-labelledby="verification-title">
+          <div class="verification-card">
+            <div class="verification-copy">
+              <span class="section-index">03 / VERIFICATION</span>
+              <h2 id="verification-title">A solution is not trusted until it closes the loop.</h2>
+              <p>
+                Every returned sequence is applied to the exact scrambled pattern.
+                Success appears only when the resulting permutation is the identity.
+              </p>
+            </div>
+            <div class="check-stack">
+              <div><span>01</span><b>Notation parsed</b><i>PASS</i></div>
+              <div><span>02</span><b>State reachable</b><i>PASS</i></div>
+              <div><span>03</span><b>Solution replayed</b><i>PASS</i></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <a class="brand" href="#top">
+          <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>CubeLab</span>
+        </a>
+        <p>Built with HTML, CSS & JavaScript · rendered in 2D · verified move by move</p>
+        <a href="#solver">Back to solver ↑</a>
+      </footer>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
